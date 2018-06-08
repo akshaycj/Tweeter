@@ -1,0 +1,13 @@
+.chip-main{
+    border:1px solid;
+    border-color: #08c;
+    border-radius: 16px;
+    width: 100px;
+    padding: 3px;
+    text-align: center;
+    z-index: 0;
+    margin: 5px;
+}
+.chip-main:hover{
+    border-color:green
+}
