@@ -6,6 +6,7 @@ import Home from './components/Home'
 import {BrowserRouter as Router,Route,Switch} from 'react-router-dom'
 import Test from './test'
 import DataProvider from './DataProvider'
+import Tweets from './components/Tweets'
 
 class App extends Component{
   render(){

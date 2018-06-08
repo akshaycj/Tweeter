@@ -6,7 +6,6 @@
     "antd": "^3.2.3",
     "babel-plugin-import": "^1.6.5",
     "firebase": "^5.0.4",
-    "query-string": "^6.1.0",
     "react": "^16.4.0",
     "react-app-rewired": "^1.4.1",
     "react-dom": "^16.4.0",

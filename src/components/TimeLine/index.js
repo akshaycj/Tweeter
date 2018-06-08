@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import "./index.css";
 import { Timeline } from "react-twitter-widgets";
 import Chips from "../Chips";
-import { Badge,Spin } from "antd";
+import { Badge, Spin } from "antd";
 import { stat } from "fs";
+import Tweets from "../Tweets";
 
 export default class extends Component {
   constructor(props) {
@@ -11,19 +12,25 @@ export default class extends Component {
 
     this.state = {
       source: this.props.user,
-      loading: true
+      loading: this.props.search ? false : true,
+      search: this.props.search,
+      s_data: this.props.s_data
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ search: this.props.search, s_data: this.props.s_data });
   }
 
   onLoadd = () => {
     console.log("loaded");
-    
+
     this.setState({ loading: false });
   };
 
   onSelect = val => {
     console.log("val", val);
-    this.setState({ source: val, loading: true });
+    this.setState({ source: val, loading: true, search: false });
   };
 
   render() {
@@ -44,10 +51,10 @@ export default class extends Component {
         </div>
         <Chips onChange={this.onSelect} />
 
-        <Spin spinning={this.state.loading}  />
+        <Spin spinning={this.state.loading} />
 
-        <Timeline
-            id="abc"
+        {!this.state.search ? (
+          <Timeline
             dataSource={{
               sourceType: "profile",
               screenName: this.state.source
@@ -58,7 +65,9 @@ export default class extends Component {
             }}
             onLoad={this.onLoadd}
           />
-
+        ) : (
+          <Tweets ids={this.props.s_data} />
+        )}
       </div>
     );
   }

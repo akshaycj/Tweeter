@@ -5,23 +5,19 @@ import { Input, Button, message } from "antd";
 import TwitterLogin from "react-twitter-auth";
 import { Provider, auth } from "../../utils/config";
 import Twit from "twit";
-import {Redirect} from 'react-router-dom'
-import {Consumer} from '../../DataProvider'
-
-
+import { Redirect } from "react-router-dom";
+import { Consumer } from "../../DataProvider";
 
 export default class Login extends Component {
   constructor(props) {
     super(props);
 
-    this.state={
-      auth:false,
-      user:[],
-    }
+    this.state = {
+      auth: false,
+      user: []
+    };
   }
-  componentDidMount() {
-    
-  }
+  componentDidMount() {}
 
   onSign = () => {
     console.log("aaas");
@@ -33,21 +29,17 @@ export default class Login extends Component {
         var token = result.credential.accessToken;
         var secret = result.credential.secret;
         var user = result.user;
-        
+
         var data = result.additionalUserInfo;
-        
+
         message.success("Success!");
 
-       
-        return data
-        
+        that.setState({ user: data.profile, auth: true });
 
+        console.log("user", data);
       })
-      .then(function(data){
-        that.setState({auth:true,user:data.profile})
-
-        console.log("user",data);
-
+      .then(function(data) {
+        var then = that;
       })
       .catch(function(error) {});
   };
@@ -55,17 +47,18 @@ export default class Login extends Component {
   render() {
     return (
       <div className="main">
-      <div className="container">
-        <img src={logo} width="60px" height="60px" />
-        <div>
-          <Button type="primary" onClick={this.onSign}>
-            Connect to Twitter
-          </Button>
+        <div className="container">
+          <img src={logo} width="60px" height="60px" />
+          <div>
+            <Button type="primary" onClick={this.onSign}>
+              Connect to Twitter
+            </Button>
+          </div>
         </div>
+        {this.state.auth ? (
+          <Redirect to={"/home/user?name=" + this.state.user.username} />
+        ) : null}
       </div>
-      {this.state.auth?<Redirect to={'/home/user?name='+this.state.user.username}/> : null }
-      
-    </div>
     );
   }
 }
