@@ -16,6 +16,7 @@
     "twit": "^2.2.10",
     "twitter": "^1.7.1"
   },
+  "homepage": "https://akshaycj.github.io/Tweeter/",
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
