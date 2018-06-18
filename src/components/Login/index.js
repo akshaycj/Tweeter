@@ -30,7 +30,7 @@ class Login extends Component {
 
       var data = result.additionalUserInfo;
 
-      console.log("user", data);
+      console.log("user", result);
 
       message.success("Success!");
 
