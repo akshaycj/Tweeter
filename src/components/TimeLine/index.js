@@ -5,8 +5,10 @@ import Chips from "../Chips";
 import { Badge, Spin } from "antd";
 import { stat } from "fs";
 import Tweets from "../Tweets";
+import { connect } from "react-redux";
+import { getUser } from "../../utils/reducers";
 
-export default class extends Component {
+class App extends Component {
   constructor(props) {
     super(props);
 
@@ -19,7 +21,13 @@ export default class extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ search: this.props.search, s_data: this.props.s_data });
+    console.log("pp", nextProps.user.username);
+
+    this.setState({
+      search: this.props.search,
+      s_data: this.props.s_data,
+      source: nextProps.user.username
+    });
   }
 
   onLoadd = () => {
@@ -72,3 +80,12 @@ export default class extends Component {
     );
   }
 }
+
+const mapStateToProps = ({ getUser }) => ({
+  user: getUser.user
+});
+
+export default connect(
+  mapStateToProps,
+  null
+)(App);

@@ -3,18 +3,20 @@ import "./index.css";
 import Feeds from "../TimeLine";
 import { Icon, Input } from "antd";
 import logo from "../../icons/twitter.png";
+import { connect } from "react-redux";
+import { getUser } from "../../utils/reducers";
 //import queryString from 'query-string'
 
 const Search = Input.Search;
 
 const s_url = "https://tweeter-cj.herokuapp.com/s?search=";
 
-export default class Home extends Component {
+class Home extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      data: [],
+      data: "nodejs",
       type: "home",
       name: "You",
       search: false
@@ -28,10 +30,8 @@ export default class Home extends Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    console.log("made");
-
-    console.log("hello", nextProps.location.search.name);
-    return null;
+    console.log("hello", nextProps.user.username);
+    return { data: nextProps.user.username };
   }
 
   searchQuery = value => {
@@ -40,13 +40,11 @@ export default class Home extends Component {
 
     fetch(s_url + value)
       .then(function(data) {
-        
-        
         return data.json();
       })
       .then(function(data) {
         that.setState({ data });
-        console.log("data",data);
+        console.log("data", data);
       });
   };
 
@@ -77,3 +75,12 @@ export default class Home extends Component {
     );
   }
 }
+
+const mapStateToProps = ({ getUser }) => ({
+  user: getUser.user
+});
+
+export default connect(
+  mapStateToProps,
+  null
+)(Home);

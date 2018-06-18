@@ -7,8 +7,9 @@ import { Provider, auth } from "../../utils/config";
 import Twit from "twit";
 import { Redirect } from "react-router-dom";
 import { Consumer } from "../../DataProvider";
-
-export default class Login extends Component {
+import { connect } from "react-redux";
+import { setUser } from "../../utils/reducers";
+class Login extends Component {
   constructor(props) {
     super(props);
 
@@ -19,29 +20,36 @@ export default class Login extends Component {
   }
   componentDidMount() {}
 
-  onSign = () => {
-    console.log("aaas");
+  async getdata() {
     var that = this;
 
-    auth
-      .signInWithPopup(Provider)
-      .then(function(result) {
-        var token = result.credential.accessToken;
-        var secret = result.credential.secret;
-        var user = result.user;
+    function onSuccess(result) {
+      var token = result.credential.accessToken;
+      var secret = result.credential.secret;
+      var user = result.user;
 
-        var data = result.additionalUserInfo;
+      var data = result.additionalUserInfo;
 
-        message.success("Success!");
+      console.log("user", data);
 
-        that.setState({ user: data.profile, auth: true });
+      message.success("Success!");
 
-        console.log("user", data);
-      })
-      .then(function(data) {
-        var then = that;
-      })
-      .catch(function(error) {});
+      that.setState({ user: data.profile, auth: true });
+
+      console.log("auth", that.state.auth);
+
+      that.props.onUser(data);
+    }
+
+    try {
+      const authData = await auth.signInWithPopup(Provider);
+
+      return onSuccess(authData);
+    } catch (error) {}
+  }
+
+  onSign = () => {
+    this.getdata();
   };
 
   render() {
@@ -55,10 +63,19 @@ export default class Login extends Component {
             </Button>
           </div>
         </div>
-        {this.state.auth ? (
-          <Redirect to={"/home/user?name=" + this.state.user.username} />
-        ) : null}
+        {this.state.auth ? <Redirect to={"/home"} /> : null}
       </div>
     );
   }
 }
+
+const mapDispatchToProps = dispatch => ({
+  onUser: user => {
+    dispatch(setUser(user));
+  }
+});
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(Login);
