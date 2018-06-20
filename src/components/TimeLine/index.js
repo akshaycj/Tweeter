@@ -7,7 +7,7 @@ import { stat } from "fs";
 import Tweets from "../Tweets";
 import { connect } from "react-redux";
 import { getUser } from "../../utils/reducers";
-
+import Chip from '../Chip'
 
 
 //"http://tachyons.io/img/avatar_1.jpg"
@@ -24,7 +24,8 @@ class App extends Component {
       source: this.props.user,
       loading: this.props.search ? false : true,
       search: this.props.search,
-      s_data: this.props.s_data
+      s_data: this.props.s_data,
+      uName:''
     };
   }
 
@@ -36,8 +37,15 @@ class App extends Component {
       s_data: this.props.s_data,
       source: nextProps.user.username,
       name: nextProps.user.profile.name,
-      photo:nextProps.user.profile.profile_image_url
+      photo:nextProps.user.profile.profile_image_url,
+      uName:nextProps.user.username,
+
     });
+  }
+
+  onItemClick = () => {
+    console.log("eee");
+    
   }
 
   onLoadd = () => {
@@ -47,9 +55,16 @@ class App extends Component {
   };
 
   onSelect = val => {
-    console.log("val", val);
-    this.setState({ source: val, loading: true, search: false });
+    
+    var source = val
+
+    this.setState({ source , loading: true, search: false });
+
   };
+
+  onUser = val =>{
+    this.setState({ source:this.state.uName , loading: true, search: false });
+  }
 
   render() {
     return (
@@ -63,7 +78,7 @@ class App extends Component {
                 title="Photo of a kitty staring at you"
               />
               <h1 class="f3 mb2">{this.state.name} </h1>
-              <h2 class="f5 fw4 gray mt0">User</h2>
+              <Chip title="User" type="user" onChange={this.onUser} />
             </div>
           </article>
         </div>
@@ -82,6 +97,7 @@ class App extends Component {
               width: 1200
             }}
             onLoad={this.onLoadd}
+            onClick={this.onItemClick}
           />
         ) : (
           <Tweets ids={this.props.s_data} />
